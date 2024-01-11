@@ -1,0 +1,27 @@
+name: Slack Notification
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  notify_slack:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Send Slack Notification
+      run: |
+        SLACK_WEBHOOK_URL='https://hooks.slack.com/triggers/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'
+        PR_TITLE="${{ github.event_name }}: ${{ github.event.pull_request.title }}"
+        PR_URL="${{ github.event.pull_request.html_url }}"
+        SENDER="${{ github.event.sender.login }}"
+
+        MESSAGE="New pull request by $SENDER: <$PR_URL|$PR_TITLE>"
+
+        curl -X POST -H 'Content-type: application/json' --data "{\"message\":\"$MESSAGE\",\"channel\":\"lecet-ticket\"}" $SLACK_WEBHOOK_URL
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
