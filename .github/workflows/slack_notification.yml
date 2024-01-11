@@ -23,5 +23,3 @@ jobs:
         MESSAGE="New pull request by $SENDER: <$PR_URL|$PR_TITLE>"
 
         curl -X POST -H 'Content-type: application/json' --data "{\"message\":\"$MESSAGE\",\"channel\":\"lecet-ticket\"}" $SLACK_WEBHOOK_URL
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
